@@ -1,21 +1,20 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "SmartMirrorInterface",
+  "version": "0.0.1",
+  "description": "Smart mirror interface",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/mads256c/SmartMirrorInterface",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "smart",
+    "mirror",
+    "interface"
   ],
   "author": "GitHub",
-  "license": "CC0-1.0",
+  "license": "Unlicense",
   "devDependencies": {
     "electron": "^3.0.4"
   }
