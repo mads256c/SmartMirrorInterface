@@ -113,6 +113,67 @@ function UpdateWeather() {
             console.log(weatherData);
             weatherTemperatureText.innerText = (weatherData.main.temp - 273.15).toFixed(0) + '\xB0';
             weatherDescriptionText.innerText = weatherData.weather[0].description;
+
+            let className = "fas fa-4x d-inline-block align-middle ";
+
+            switch (weatherData.weather[0].icon) {
+
+                case "01d":
+                    className += "fa-sun";
+                    break;
+
+                case "01n":
+                    className += "fa-moon";
+                    break;
+
+                case "02d":
+                    className += "fa-cloud-sun";
+                    break;
+
+                case "02n":
+                    className += "fa-cloud-moon";
+                    break;
+
+                case "03d":
+                case "03n":
+                case "04d":
+                case "04n":
+                    className += "fa-cloud";
+                    break;
+
+                case "09d":
+                    className += "fa-cloud-showers-heavy";
+                    break;
+
+                case "10d":
+                    className += "fa-cloud-sun-rain";
+                    break;
+
+                case "10n":
+                    className += "fa-cloud-moon-rain";
+                    break;
+
+                case "11d":
+                case "11n":
+                    className += "fa-bolt";
+                    break;
+
+                case "13d":
+                case "13n":
+                    className += "fa-snowflake";
+                    break;
+
+                case "50d":
+                case "50n":
+                    className += "fa-smog";
+                    break;
+
+                default:
+                    className += "fa-times-circle";
+                    break;
+            }
+
+            weatherIcon.className = className;
         }
         else
         {
