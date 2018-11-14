@@ -1,4 +1,4 @@
-$(OnDocumentLoad);
+document.addEventListener('DOMContentLoaded', OnDocumentLoad, false);
 
 let greetingText;
 

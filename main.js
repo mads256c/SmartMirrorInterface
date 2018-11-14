@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const electronLocalshortcut = require('electron-localshortcut');
 const {app, BrowserWindow} = require('electron');
+const webserver = require('./webserver');
 
 const isDev = true;
 
@@ -65,6 +66,8 @@ app.on('activate', function () {
         createWindow();
     }
 });
+
+webserver.startWebserver();
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
