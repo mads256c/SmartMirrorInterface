@@ -4,11 +4,24 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="index.js"></script>
 </head>
 <body class="text-white">
-<div class="container-fluid">
-    <h1 class="display-1 text-center">Hello world!</h1>
+<div class="container">
+    <h1 class="display-1 text-center" id="greeting">Good morning!</h1>
+    <div class="header-container">
+        <div class="float-left d-inline-block" id="weather-header-container">
+            <h2 class="display-2 d-inline-block align-middle" id="weather-temperature">32&#176;</h2>
+            <i class="fas fa-sun fa-4x d-inline-block align-middle" id="weather-icon"></i>
+        </div>
+        <div class="float-right d-inline-block" id="time-header-container">
+            <h2 class="display-2" id="time-text">13:37</h2>
+        </div>
+    </div>
 </div>
 
 
