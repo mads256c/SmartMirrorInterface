@@ -1,5 +1,19 @@
 {
   "webserver": {
     "port": 9615
+  },
+
+  "interface": {
+    "locale": {
+      "layout": "en-US",
+      "useMilitaryTime": false,
+      "language:": "English"
+    },
+
+    "weather": {
+      "city": "Aalborg",
+      "countryCode": "dk",
+      "apiKey": "6cc08bb6b5e319f5b06d9a9b20e31e94"
+    }
   }
 }

@@ -4,6 +4,7 @@ let greetingText;
 
 let weatherTemperatureText;
 let weatherIcon;
+let weatherDescriptionText;
 
 let timeText;
 
@@ -14,6 +15,7 @@ function OnDocumentLoad() {
 
     weatherTemperatureText = document.getElementById("weather-temperature");
     weatherIcon = document.getElementById("weather-icon");
+    weatherDescriptionText = document.getElementById("weather-description");
 
     timeText = document.getElementById("time-text");
 
@@ -54,7 +56,9 @@ function OnError() {
 
 function OnReady() {
     OnUpdate();
+    UpdateWeather();
     setInterval(OnUpdate, 1000);
+    setInterval(UpdateWeather, 1000 * 60 * 10);
 
     document.body.style.animationPlayState = "running";
 }
@@ -65,8 +69,8 @@ function OnUpdate() {
 
 function UpdateTime() {
     let now = new Date();
-    timeText.innerText = now.toLocaleTimeString('en-US', {
-        hour12: false,
+    timeText.innerText = now.toLocaleTimeString(config.interface.locale.layout, {
+        hour12: config.interface.locale.useMilitaryTime,
         hour: "numeric",
         minute: "numeric"
     });
@@ -93,4 +97,34 @@ function UpdateTime() {
     {
         greetingText.innerText = "Good Night";
     }
+}
+
+function UpdateWeather() {
+
+    let city = config.interface.weather.city;
+    let countryCode = config.interface.weather.countryCode;
+    let apiKey = config.interface.weather.apiKey;
+
+    let request = new XMLHttpRequest();
+
+    request.addEventListener("load", function() {
+        if (request.status === 200){
+            let weatherData = JSON.parse(request.responseText);
+            console.log(weatherData);
+            weatherTemperatureText.innerText = (weatherData.main.temp - 273.15).toFixed(0) + '\xB0';
+            weatherDescriptionText.innerText = weatherData.weather[0].description;
+        }
+        else
+        {
+            console.log("Error getting weather data", request.responseText);
+        }
+
+    }, false);
+
+    request.addEventListener("error", function () {
+        console.log("Error getting weather data", request.responseText);
+    }, false);
+
+    request.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countryCode + "&appid=" + apiKey, true);
+    request.send();
 }
