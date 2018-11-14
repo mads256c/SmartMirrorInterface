@@ -7,6 +7,8 @@ let weatherIcon;
 
 let timeText;
 
+let config;
+
 function OnDocumentLoad() {
     greetingText = document.getElementById("greeting");
 
@@ -15,8 +17,46 @@ function OnDocumentLoad() {
 
     timeText = document.getElementById("time-text");
 
+
+    GetConfig();
+}
+
+function GetConfig() {
+
+    let request = new XMLHttpRequest();
+
+    request.addEventListener("load", function() {
+        console.log(request.responseText);
+        if (request.status === 200){
+            config = JSON.parse(request.responseText);
+            OnReady();
+        }
+        else
+        {
+            OnError();
+        }
+
+    }, false);
+
+    request.addEventListener("error", function () {
+        OnError();
+    }, false);
+
+    request.open("GET", "http://localhost:9615/getconfig", true);
+    request.send();
+}
+
+function OnError() {
+    console.log("Could not get configuration");
+    greetingText.innerText = "Could not get configuration";
+    document.body.style.animationPlayState = "running";
+}
+
+function OnReady() {
     OnUpdate();
     setInterval(OnUpdate, 1000);
+
+    document.body.style.animationPlayState = "running";
 }
 
 function OnUpdate() {
