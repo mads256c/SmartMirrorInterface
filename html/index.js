@@ -55,16 +55,13 @@ function OnError() {
 }
 
 function OnReady() {
-    OnUpdate();
+
+    UpdateTime();
     UpdateWeather();
-    setInterval(OnUpdate, 1000);
+    setInterval(UpdateTime, 1000 * 5);
     setInterval(UpdateWeather, 1000 * 60 * 10);
 
     document.body.style.animationPlayState = "running";
-}
-
-function OnUpdate() {
-    UpdateTime();
 }
 
 function UpdateTime() {
@@ -170,6 +167,7 @@ function UpdateWeather() {
 
                 default:
                     className += "fa-times-circle";
+                    console.log("Invalid icon: ", weatherData.weather[0].icon);
                     break;
             }
 
