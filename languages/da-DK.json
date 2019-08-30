@@ -1,5 +1,10 @@
 {
     "greetings":["Godmorgen","Goddag","Godeftermiddag","Godaften", "Godnat"],
     "units": "si",
-    "hourformat": false
+    "hourformat": false,
+
+    "strings": {
+        "today": "Idag",
+        "tomorrow": "I morgen"
+    }
 }
