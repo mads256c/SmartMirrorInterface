@@ -23,6 +23,7 @@ function OnDocumentLoad() {
 
     GetConfig();
 }
+
 function GetLanguage(){
 
     let request = new XMLHttpRequest();
@@ -30,7 +31,7 @@ function GetLanguage(){
     request.addEventListener("load", function() {
         console.log(request.responseText);
         if (request.status === 200){
-            config = JSON.parse(request.responseText);
+            lang = JSON.parse(request.responseText);
             OnReady();
         }
         else
@@ -56,7 +57,7 @@ function GetConfig() {
         console.log(request.responseText);
         if (request.status === 200){
             config = JSON.parse(request.responseText);
-            OnReady();
+            GetLanguage();
         }
         else
         {
@@ -123,9 +124,16 @@ function UpdateTime() {
 
 function UpdateWeather() {
 
-    let city = config.interface.weather.city;
-    let countryCode = config.interface.weather.countryCode;
+    let latitude = config.interface.weather.latitude;
+    let longitude = config.interface.weather.longitude;
     let apiKey = config.interface.weather.apiKey;
+    let unit;
+
+    if (lang.units == "us"){
+        unit = "&#x2109;";
+    } else {
+        unit = "&#x2103;";
+    }
 
     let request = new XMLHttpRequest();
 
@@ -133,66 +141,49 @@ function UpdateWeather() {
         if (request.status === 200){
             let weatherData = JSON.parse(request.responseText);
             console.log(weatherData);
-            weatherTemperatureText.innerText = (weatherData.main.temp - 273.15).toFixed(0) + '\xB0';
-            weatherDescriptionText.innerText = weatherData.weather[0].description;
+            weatherTemperatureText.innerText = weatherData.currently.temperature + " " + unit;
+            weatherDescriptionText.innerText = weatherData.currently.summary;
 
             let className = "fas fa-4x d-inline-block align-middle ";
 
-            switch (weatherData.weather[0].icon) {
+            switch (weatherData.currently.icon) {
 
-                case "01d":
+                case "clear-day":
                     className += "fa-sun";
                     break;
 
-                case "01n":
+                case "clear-night":
                     className += "fa-moon";
                     break;
 
-                case "02d":
+                case "partly-cloudy-day":
                     className += "fa-cloud-sun";
                     break;
 
-                case "02n":
+                case "partly-cloudy-night":
                     className += "fa-cloud-moon";
                     break;
 
-                case "03d":
-                case "03n":
-                case "04d":
-                case "04n":
+                case "cloudy":
                     className += "fa-cloud";
                     break;
 
-                case "09d":
+                case "sleet":
+                case "rain":
                     className += "fa-cloud-showers-heavy";
                     break;
 
-                case "10d":
-                    className += "fa-cloud-sun-rain";
-                    break;
-
-                case "10n":
-                    className += "fa-cloud-moon-rain";
-                    break;
-
-                case "11d":
-                case "11n":
-                    className += "fa-bolt";
-                    break;
-
-                case "13d":
-                case "13n":
+                case "snow":
                     className += "fa-snowflake";
                     break;
 
-                case "50d":
-                case "50n":
+                case "fog":
                     className += "fa-smog";
                     break;
 
                 default:
                     className += "fa-times-circle";
-                    console.log("Invalid icon: ", weatherData.weather[0].icon);
+                    console.log("Invalid icon: ", weatherData.currently.icon);
                     break;
             }
 
@@ -209,6 +200,8 @@ function UpdateWeather() {
         console.log("Error getting weather data", request.responseText);
     }, false);
 
-    request.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countryCode + "&appid=" + apiKey, true);
+    let apiLang = config.interface.locale.layout.split("-")
+
+    request.open("GET", "https://api.darksky.net/forecast/" + apiKey  + "/" + latitude + ","+ longitude + "?exclude=minutely,hourly,daily,alerts,flags" + "&lang=" + apiLang[0] + "&units=" + lang.units, true);
     request.send();
 }

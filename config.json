@@ -9,9 +9,9 @@
     },
 
     "weather": {
-      "city": "Aalborg",
-      "countryCode": "dk",
-      "apiKey": "6cc08bb6b5e319f5b06d9a9b20e31e94"
+        "latitude": "57.0488195",
+        "longitude": "9.9217469999999822",
+        "apiKey": "97bca87e978b87f27efdcf3fa67dae96jk"
     }
   }
 }
