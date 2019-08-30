@@ -6,7 +6,7 @@ let language;
 
 exports.startWebserver = function(){
     config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json'))
+    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json', 'utf8'));
     http.createServer(handleRequest).listen(config.webserver.port);
 };
 
