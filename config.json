@@ -15,7 +15,9 @@
     },
 
     "calender": {
-      "icalUrl": "https://calendar.google.com/calendar/ical/mads256h%40gmail.com/private-815a9a5ddc704773e919cfbf0f2675fd/basic.ics"
+      "icalUrls": [
+        "https://calendar.google.com/calendar/ical/mads256h%40gmail.com/private-815a9a5ddc704773e919cfbf0f2675fd/basic.ics"
+      ]
     }
   }
 }

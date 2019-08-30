@@ -224,10 +224,11 @@ let currentCalenderItem = 0;
 
 let isStarted = false;
 
-function UpdateCalender(){
-    ical.fromURL(config.interface.calender.icalUrl, {}, function(err, data){
-        calenderItems = [];
+let newCalenderItems = [];
 
+function GetCalender(i){
+    ical.fromURL(config.interface.calender.icalUrls[i], {}, function(err, data){
+        if (err) console.log(err);
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
                 let ev = data[k];
@@ -240,24 +241,36 @@ function UpdateCalender(){
                             "location": ev.location,
                             "description": ev.description
                         };
-                        calenderItems.push(item);
-
+                        newCalenderItems.push(item);
                     }
                 }
             }
         }
+        i++;
+        if (i < config.interface.calender.icalUrls.length){
+            GetCalender(i);
+        }
+        else
+        {
+            newCalenderItems.sort(function(a,b){
+                // Turn your strings into dates, and then subtract them
+                // to get a value that is either negative, positive, or zero.
+                return a.startDate.getTime() - b.startDate.getTime();
+            });
 
-        calenderItems.sort(function(a,b){
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
-            return a.startDate.getTime() - b.startDate.getTime();
-        });
+            calenderItems = newCalenderItems;
 
-        if (!isStarted){
-            isStarted = true;
-            NextCalenderItem();
+            if (!isStarted){
+                isStarted = true;
+                NextCalenderItem();
+            }
         }
     });
+}
+
+function UpdateCalender(){
+    newCalenderItems = [];
+    GetCalender(0);
 }
 
 let isDisplayed = false;
