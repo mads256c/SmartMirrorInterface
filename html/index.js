@@ -137,9 +137,9 @@ function UpdateWeather() {
     let unit;
 
     if (lang.units == "us"){
-        unit = "&#x2109;";
+        unit = "\u2109";
     } else {
-        unit = "&#x2103;";
+        unit = "\u2103";
     }
 
     let request = new XMLHttpRequest();

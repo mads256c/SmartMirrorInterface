@@ -5,13 +5,13 @@
 
   "interface": {
     "locale": {
-      "layout": "en-US"
+      "layout": "en-UK"
     },
 
     "weather": {
         "latitude": "57.0488195",
         "longitude": "9.9217469999999822",
-        "apiKey": "97bca87e978b87f27efdcf3fa67dae96jk"
+        "apiKey": "97bca87e978b87f27efdcf3fa67dae96"
     }
   }
 }
