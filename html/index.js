@@ -296,7 +296,7 @@ function NextCalenderItem(oldCalenderItem){
 
                 if (!(item.startDate.getHours() === 0 && item.startDate.getMinutes() === 0 && item.endDate.getHours() === 0 && item.endDate.getMinutes() === 0)){
                     let time = document.createElement("DIV");
-                    time.className = "d-block";
+                    time.className = "calender-big d-block";
 
                     let timeIcon = document.createElement("I");
                     timeIcon.className = "fas fa-clock d-inline-block";
@@ -322,6 +322,7 @@ function NextCalenderItem(oldCalenderItem){
 
                 if (item.location !== ""){
                     let location = document.createElement("DIV");
+                    location.className = "calender-big d-block";
 
                     let locationIcon = document.createElement("I");
                     locationIcon.className = "fas fa-location-arrow d-inline-block";
