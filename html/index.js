@@ -9,6 +9,7 @@ let weatherDescriptionText;
 let timeText;
 
 let config;
+let lang;
 
 function OnDocumentLoad() {
     greetingText = document.getElementById("greeting");
@@ -21,6 +22,30 @@ function OnDocumentLoad() {
 
 
     GetConfig();
+}
+function GetLanguage(){
+
+    let request = new XMLHttpRequest();
+
+    request.addEventListener("load", function() {
+        console.log(request.responseText);
+        if (request.status === 200){
+            config = JSON.parse(request.responseText);
+            OnReady();
+        }
+        else
+        {
+            OnError();
+        }
+
+    }, false);
+
+    request.addEventListener("error", function () {
+        OnError();
+    }, false);
+
+    request.open("GET", "http://localhost:9615/getlanguage", true);
+    request.send();
 }
 
 function GetConfig() {
@@ -67,7 +92,7 @@ function OnReady() {
 function UpdateTime() {
     let now = new Date();
     timeText.innerText = now.toLocaleTimeString(config.interface.locale.layout, {
-        hour12: config.interface.locale.useMilitaryTime,
+        hour12: lang.hourformat,
         hour: "numeric",
         minute: "numeric"
     });
@@ -76,23 +101,23 @@ function UpdateTime() {
 
     if (hours > 5 && hours < 10)
     {
-        greetingText.innerText = "Good Morning";
+        greetingText.innerText = lang.greetings[0];
     }
     else if (hours > 10 && hours < 14)
     {
-        greetingText.innerText = "Good Dinner";
+        greetingText.innerText = lang.greetings[1];
     }
     else if (hours > 14 && hours < 18)
     {
-        greetingText.innerText = "Good Afternoon";
+        greetingText.innerText = lang.greetings[2];
     }
     else if (hours > 18 && hours < 22)
     {
-        greetingText.innerText = "Good Evening";
+        greetingText.innerText = lang.greetings[3];
     }
     else
     {
-        greetingText.innerText = "Good Night";
+        greetingText.innerText = lang.greetings[4];
     }
 }
 

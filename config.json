@@ -5,9 +5,7 @@
 
   "interface": {
     "locale": {
-      "layout": "en-US",
-      "useMilitaryTime": false,
-      "language:": "English"
+      "layout": "en-US"
     },
 
     "weather": {

@@ -2,9 +2,11 @@ const http = require('http');
 const fs = require('fs');
 
 let config;
+let language;
 
 exports.startWebserver = function(){
     config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json'))
     http.createServer(handleRequest).listen(config.webserver.port);
 };
 
@@ -21,6 +23,10 @@ function handleRequest(request, response){
             handleGetConfig(request, response);
             break;
 
+        case "/getlanguage":
+            handleGetLanguage(request,response);
+            break;
+
         default:
             handle404(request, response);
             break;
@@ -35,6 +41,11 @@ function handleTestPage(request, response){
 function handleGetConfig(request, response){
     response.writeHead(200, {'Content-Type': 'application/json'});
     response.end(JSON.stringify(config));
+}
+
+function handleGetLanguage(request, response){
+    response.writeHead(200, {'Content-Type': 'application/json'});
+    response.end(JSON.stringify(language));
 }
 
 function handle404(request, response){
