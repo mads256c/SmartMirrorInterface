@@ -45,6 +45,10 @@ body {
     margin-left: 5px;
 }
 
+.calender-big {
+    font-size: 1.5rem;
+}
+
 .calender-time {
     display: inline-block;
     margin-left: 5px;
@@ -52,4 +56,5 @@ body {
 
 .calender-description {
     display: block;
+    text-align: justify;
 }
