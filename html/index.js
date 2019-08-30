@@ -230,7 +230,7 @@ let newCalenderItems = [];
 
 function GetCalender(i){
     ical.fromURL(config.interface.calender.icalUrls[i], {}, function(err, data){
-        if (err) console.log(err);
+        if (err) console.error("Calender: " + err);
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
                 let ev = data[k];
