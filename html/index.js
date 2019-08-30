@@ -28,6 +28,7 @@ function OnDocumentLoad() {
     calender = document.getElementById("calender");
 
     GetConfig();
+    //GetLanguage();
 }
 function GetLanguage(){
 
@@ -36,7 +37,7 @@ function GetLanguage(){
     request.addEventListener("load", function() {
         console.log(request.responseText);
         if (request.status === 200){
-            config = JSON.parse(request.responseText);
+            lang = JSON.parse(request.responseText);
             OnReady();
         }
         else
@@ -62,7 +63,7 @@ function GetConfig() {
         console.log(request.responseText);
         if (request.status === 200){
             config = JSON.parse(request.responseText);
-            OnReady();
+            GetLanguage();
         }
         else
         {
@@ -86,12 +87,12 @@ function OnError() {
 }
 
 function OnReady() {
-
     UpdateTime();
     UpdateWeather();
     setInterval(UpdateTime, 1000 * 5);
     setInterval(UpdateWeather, 1000 * 60 * 10);
-    UpdateCalender();
+    setInterval(UpdateCalender, 1000);
+    NextCalenderItem();
 
     document.body.style.animationPlayState = "running";
 }
@@ -226,98 +227,153 @@ function sameDay(d1, d2) {
         d1.getDate() === d2.getDate();
 }
 
+let calenderItems = [];
+let currentCalenderItem = 0;
+
 function UpdateCalender(){
+    ical.fromURL(config.interface.calender.icalUrl, {}, function(err, data){
+        calenderItems = [];
 
-    calender.style.animationPlayState = "running";
-
-    setTimeout(function(){
-        let child = calender.lastElementChild;
-        while (child) {
-            calender.removeChild(child);
-            child = calender.lastElementChild;
-        }
-        ical.fromURL("https://calendar.google.com/calendar/ical/mads256h%40gmail.com/private-815a9a5ddc704773e919cfbf0f2675fd/basic.ics", {}, function(err, data){
-            for (let k in data) {
-                if (data.hasOwnProperty(k)) {
-                    let ev = data[k];
-                    if (data[k].type == 'VEVENT') {
-                        if (sameDay(ev.start, new Date())){
-                            let title = document.createElement("H1");
-                            title.className = "calender-title";
-                            title.innerText = ev.summary;
-                            calender.appendChild(title);
-
-                            let time = document.createElement("DIV");
-                            time.className = "d-block";
-
-                            let timeIcon = document.createElement("I");
-                            timeIcon.className = "fas fa-clock d-inline-block";
-                            time.appendChild(timeIcon);
-
-                            let timeText = document.createElement("SPAN");
-
-                            let hh = ev.start.getHours();
-                            let mm = ev.start.getMinutes();
-
-                            if (hh < 10) {
-                                hh = '0' + hh;
-                            }
-                            if (mm < 10) {
-                                mm = '0' + mm;
-                            }
-
-                            let HH = ev.end.getHours();
-                            let MM = ev.end.getMinutes();
-
-                            if (HH < 10) {
-                                HH = '0' + HH;
-                            }
-                            if (MM < 10) {
-                                MM = '0' + MM;
-                            }
-
-                            timeText.innerText = hh + ":" + mm + " - " + HH + ":" + MM;
-                            timeText.className = "calender-time";
-                            time.appendChild(timeText);
-
-                            calender.appendChild(time);
-
-
-                            let location = document.createElement("DIV");
-
-                            let locationIcon = document.createElement("I");
-                            locationIcon.className = "fas fa-location-arrow d-inline-block";
-                            location.appendChild(locationIcon);
-
-                            let locationText = document.createElement("SPAN");
-                            locationText.innerText = ev.location;
-                            locationText.className = "calender-location";
-                            location.appendChild(locationText);
-
-                            calender.appendChild(location);
-
-
-                            let description = document.createElement("P");
-                            description.innerText = ev.description;
-                            description.className = "calender-description";
-
-                            calender.appendChild(description);
-
-                            calender.style.animationPlayState = "paused";
-                            calender.style.animationName = "opacity-fade-on";
-                            calender.style.animationPlayState = "running";
-
-                            setTimeout(function(){
-                                calender.style.animationName = "opacity-fade-off";
-                                calender.style.animationPlayState = "paused";
-                            }, 1000);
-                        }
+        for (let k in data) {
+            if (data.hasOwnProperty(k)) {
+                let ev = data[k];
+                if (data[k].type == 'VEVENT') {
+                    if (sameDay(ev.start, new Date())){
+                        let item = {
+                            "title": ev.summary,
+                            "startDate": ev.start,
+                            "endDate": ev.end,
+                            "location": ev.location,
+                            "description": ev.description
+                        };
+                        calenderItems.push(item);
 
                     }
                 }
             }
+        }
+
+        calenderItems.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return a.startDate.getTime() - b.startDate.getTime();
         });
-    }, 1000);
+    });
+}
+
+let isDisplayed = false;
+
+function NextCalenderItem(oldCalenderItem){
+    if (calenderItems.length >= 1)
+    {
+        if (currentCalenderItem >= calenderItems.length){
+            currentCalenderItem = 0;
+        }
+
+        if (oldCalenderItem !== calenderItems[currentCalenderItem] || !isDisplayed){
+            calender.style.animationPlayState = "running";
+
+            setTimeout(function(){
+                let child = calender.lastElementChild;
+                while (child) {
+                    calender.removeChild(child);
+                    child = calender.lastElementChild;
+                }
+
+                let item = calenderItems[currentCalenderItem];
+
+                let title = document.createElement("H1");
+                title.className = "calender-title";
+                title.innerText = item.title === "" ? "(no title)" : item.title;
+                calender.appendChild(title);
+
+                if (!(item.startDate.getHours() === 0 && item.startDate.getMinutes() === 0 && item.endDate.getHours() === 0 && item.endDate.getMinutes() === 0)){
+                    let time = document.createElement("DIV");
+                    time.className = "d-block";
+
+                    let timeIcon = document.createElement("I");
+                    timeIcon.className = "fas fa-clock d-inline-block";
+                    time.appendChild(timeIcon);
+
+                    let timeText = document.createElement("SPAN");
 
 
+                    if (item.endDate === undefined || item.startDate === item.endDate){
+                        timeText.innerText = FormattedTime(item.startDate);
+                    }
+                    else
+                    {
+                        timeText.innerText = FormattedTime(item.startDate) + " - " + FormattedTime(item.endDate);
+                    }
+
+                    timeText.className = "calender-time";
+                    time.appendChild(timeText);
+
+
+                    calender.appendChild(time);
+                }
+
+
+
+
+                if (item.location !== ""){
+                    let location = document.createElement("DIV");
+
+                    let locationIcon = document.createElement("I");
+                    locationIcon.className = "fas fa-location-arrow d-inline-block";
+                    location.appendChild(locationIcon);
+
+                    let locationText = document.createElement("SPAN");
+                    locationText.innerText = item.location;
+                    locationText.className = "calender-location";
+                    location.appendChild(locationText);
+
+                    calender.appendChild(location);
+                }
+
+
+
+                let description = document.createElement("P");
+                description.innerText = item.description;
+                description.className = "calender-description";
+
+                calender.appendChild(description);
+
+                calender.style.animationPlayState = "paused";
+                calender.style.animationName = "opacity-fade-on";
+                calender.style.animationPlayState = "running";
+
+                setTimeout(function(){
+                    calender.style.animationPlayState = "paused";
+                    calender.style.animationName = "opacity-fade-off";
+
+                    isDisplayed = true;
+                }, 1000);
+
+            }, 1000);
+        }
+
+    }
+
+    setTimeout(function(){
+        currentCalenderItem++;
+        NextCalenderItem(calenderItems[currentCalenderItem - 1]);
+    }, 12000);
+}
+
+/**
+ * @return {string}
+ */
+function FormattedTime(date){
+    let hh = date.getHours();
+    let mm = date.getMinutes();
+
+    if (hh < 10) {
+        hh = '0' + hh;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+
+    return hh + ":" + mm;
 }
