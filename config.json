@@ -4,6 +4,8 @@
   },
 
   "interface": {
+    "name": "",
+
     "locale": {
       "layout": "da-DK"
     },
