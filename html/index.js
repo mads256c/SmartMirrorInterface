@@ -148,7 +148,7 @@ function UpdateWeather() {
         if (request.status === 200){
             let weatherData = JSON.parse(request.responseText);
             console.log(weatherData);
-            weatherTemperatureText.innerText = weatherData.currently.temperature + " " + unit;
+            weatherTemperatureText.innerText = Math.round(weatherData.currently.temperature) + " " + unit;
             weatherDescriptionText.innerText = weatherData.currently.summary;
 
             let className = "fas fa-4x d-inline-block align-middle ";
@@ -231,8 +231,8 @@ function UpdateCalender(){
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
                 let ev = data[k];
-                if (data[k].type == 'VEVENT') {
-                    if (sameDay(ev.start, new Date())){
+                if (data[k].type === 'VEVENT') {
+                    if (sameDay(ev.start, new Date()) || sameDay(ev.start, new Date(new Date().getTime() + 24 * 60 * 60 * 1000))){
                         let item = {
                             "title": ev.summary,
                             "startDate": ev.start,
@@ -281,6 +281,11 @@ function NextCalenderItem(oldCalenderItem){
 
                 let item = calenderItems[currentCalenderItem];
 
+                let day = document.createElement("H1");
+                day.className = "calender-day display-4";
+                day.innerText = sameDay(item.startDate, new Date()) ? lang.strings.today : lang.strings.tomorrow;
+                calender.appendChild(day);
+
                 let title = document.createElement("H1");
                 title.className = "calender-title";
                 title.innerText = item.title === "" ? "(no title)" : item.title;
@@ -312,9 +317,6 @@ function NextCalenderItem(oldCalenderItem){
                     calender.appendChild(time);
                 }
 
-
-
-
                 if (item.location !== ""){
                     let location = document.createElement("DIV");
 
@@ -329,7 +331,6 @@ function NextCalenderItem(oldCalenderItem){
 
                     calender.appendChild(location);
                 }
-
 
 
                 let description = document.createElement("P");

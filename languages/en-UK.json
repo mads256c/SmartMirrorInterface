@@ -1,5 +1,10 @@
 {
     "greetings":["Good Morning","Hello","Good Afternoon","Good Evening", "Good Night"],
     "units": "si",
-    "hourformat": false
+    "hourformat": false,
+
+    "strings": {
+        "today": "Today",
+        "tomorrow": "Tomorrow"
+    }
 }
