@@ -20,7 +20,7 @@ A simple clock with both 12-hour and 24-hour support
 Clone this repo yada yada yada
 
 ## Configuration
-Most configurations take place in ´config.json´
+Most configurations take place in `config.json`
 
 ## License
 
