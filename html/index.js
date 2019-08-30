@@ -93,7 +93,6 @@ function OnReady() {
     setInterval(UpdateTime, 1000 * 5);
     setInterval(UpdateWeather, 1000 * 60 * 10);
     setInterval(UpdateCalender, 1000);
-    NextCalenderItem();
 
     document.body.style.animationPlayState = "running";
 }
@@ -223,6 +222,8 @@ function sameDay(d1, d2) {
 let calenderItems = [];
 let currentCalenderItem = 0;
 
+let isStarted = false;
+
 function UpdateCalender(){
     ical.fromURL(config.interface.calender.icalUrl, {}, function(err, data){
         calenderItems = [];
@@ -251,6 +252,11 @@ function UpdateCalender(){
             // to get a value that is either negative, positive, or zero.
             return a.startDate.getTime() - b.startDate.getTime();
         });
+
+        if (!isStarted){
+            isStarted = true;
+            NextCalenderItem();
+        }
     });
 }
 
