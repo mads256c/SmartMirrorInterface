@@ -4,8 +4,10 @@
   },
 
   "interface": {
+    "name": "",
+
     "locale": {
-      "layout": "en-US"
+      "layout": "da-DK"
     },
 
     "weather": {
