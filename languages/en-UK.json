@@ -1,4 +1,5 @@
 {
+    "lang": "en-UK",
     "greetings":["Good Morning","Hello","Good Afternoon","Good Evening", "Good Night"],
     "units": "si",
     "hourformat": false,

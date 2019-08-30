@@ -1,4 +1,5 @@
 {
+    "lang": "en-US.json",
     "greetings":["Good Morning","Hello","Good Afternoon","Good Evening", "Good Night"],
     "units": "us",
     "hourformat": true,

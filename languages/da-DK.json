@@ -1,4 +1,5 @@
 {
+    "lang": "da-DK",
     "greetings":["Godmorgen","Goddag","Godeftermiddag","Godaften", "Godnat"],
     "units": "si",
     "hourformat": false,
