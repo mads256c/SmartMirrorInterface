@@ -10,6 +10,11 @@ let timeText;
 
 let config;
 
+let calender;
+
+const ical = require('node-ical');
+
+
 function OnDocumentLoad() {
     greetingText = document.getElementById("greeting");
 
@@ -19,6 +24,7 @@ function OnDocumentLoad() {
 
     timeText = document.getElementById("time-text");
 
+    calender = document.getElementById("calender");
 
     GetConfig();
 }
@@ -60,6 +66,7 @@ function OnReady() {
     UpdateWeather();
     setInterval(UpdateTime, 1000 * 5);
     setInterval(UpdateWeather, 1000 * 60 * 10);
+    UpdateCalender();
 
     document.body.style.animationPlayState = "running";
 }
@@ -186,4 +193,106 @@ function UpdateWeather() {
 
     request.open("GET", "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countryCode + "&appid=" + apiKey, true);
     request.send();
+}
+
+function sameDay(d1, d2) {
+    return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate();
+}
+
+function UpdateCalender(){
+
+    calender.style.animationPlayState = "running";
+
+    setTimeout(function(){
+        let child = calender.lastElementChild;
+        while (child) {
+            calender.removeChild(child);
+            child = calender.lastElementChild;
+        }
+        ical.fromURL("https://calendar.google.com/calendar/ical/mads256h%40gmail.com/private-815a9a5ddc704773e919cfbf0f2675fd/basic.ics", {}, function(err, data){
+            for (let k in data) {
+                if (data.hasOwnProperty(k)) {
+                    let ev = data[k];
+                    if (data[k].type == 'VEVENT') {
+                        if (sameDay(ev.start, new Date())){
+                            let title = document.createElement("H1");
+                            title.className = "calender-title";
+                            title.innerText = ev.summary;
+                            calender.appendChild(title);
+
+                            let time = document.createElement("DIV");
+                            time.className = "d-block";
+
+                            let timeIcon = document.createElement("I");
+                            timeIcon.className = "fas fa-clock d-inline-block";
+                            time.appendChild(timeIcon);
+
+                            let timeText = document.createElement("SPAN");
+
+                            let hh = ev.start.getHours();
+                            let mm = ev.start.getMinutes();
+
+                            if (hh < 10) {
+                                hh = '0' + hh;
+                            }
+                            if (mm < 10) {
+                                mm = '0' + mm;
+                            }
+
+                            let HH = ev.end.getHours();
+                            let MM = ev.end.getMinutes();
+
+                            if (HH < 10) {
+                                HH = '0' + HH;
+                            }
+                            if (MM < 10) {
+                                MM = '0' + MM;
+                            }
+
+                            timeText.innerText = hh + ":" + mm + " - " + HH + ":" + MM;
+                            timeText.className = "calender-time";
+                            time.appendChild(timeText);
+
+                            calender.appendChild(time);
+
+
+                            let location = document.createElement("DIV");
+
+                            let locationIcon = document.createElement("I");
+                            locationIcon.className = "fas fa-location-arrow d-inline-block";
+                            location.appendChild(locationIcon);
+
+                            let locationText = document.createElement("SPAN");
+                            locationText.innerText = ev.location;
+                            locationText.className = "calender-location";
+                            location.appendChild(locationText);
+
+                            calender.appendChild(location);
+
+
+                            let description = document.createElement("P");
+                            description.innerText = ev.description;
+                            description.className = "calender-description";
+
+                            calender.appendChild(description);
+
+                            calender.style.animationPlayState = "paused";
+                            calender.style.animationName = "opacity-fade-on";
+                            calender.style.animationPlayState = "running";
+
+                            setTimeout(function(){
+                                calender.style.animationName = "opacity-fade-off";
+                                calender.style.animationPlayState = "paused";
+                            }, 1000);
+                        }
+
+                    }
+                }
+            }
+        });
+    }, 1000);
+
+
 }
