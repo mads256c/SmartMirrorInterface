@@ -5,9 +5,26 @@ let config;
 let language;
 
 exports.startWebserver = function(){
-    config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json', 'utf8'));
-    http.createServer(handleRequest).listen(config.webserver.port);
+
+    fs.stat('config.json', function(err, stats) {
+        if(stats === undefined){
+            console.log(err);
+        } else {
+            console.log("fil eksisterer");
+            config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+            fs.stat('languages/' + config.interface.locale.layout + '.json', function(err,stats) {
+                if(stats === undefined){
+                    console.log("Locale not yet supported, using en-US");
+                    language = JSON.parse(fs.readFileSync('languages/en-US.json'));
+                } else {
+                    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json', 'utf8'));
+                }
+            });
+
+            http.createServer(handleRequest).listen(config.webserver.port);
+        }
+    });
 };
 
 function handleRequest(request, response){
@@ -52,3 +69,4 @@ function handle404(request, response){
     response.writeHead(404, {'Content-Type': 'text/html'});
     response.end("<html><head><body>404 Not Found</body></head></html>");
 }
+
