@@ -36,7 +36,6 @@ function OnDocumentLoad() {
     spotifyArtist = document.getElementById("spotify-artist");
 
     GetConfig();
-    //GetLanguage();
 }
 
 function GetLanguage(){
@@ -255,7 +254,7 @@ function UpdateWeather() {
         console.log("Error getting weather data", request.responseText);
     }, false);
 
-    let apiLang = config.interface.locale.layout.split("-")
+    let apiLang = lang.lang.split("-");
 
     request.open("GET", "https://api.darksky.net/forecast/" + apiKey  + "/" + latitude + ","+ longitude + "?exclude=minutely,hourly,daily,alerts,flags" + "&lang=" + apiLang[0] + "&units=" + lang.units, true);
     request.send();
