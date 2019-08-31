@@ -8,6 +8,11 @@
     to {opacity: 0;}
 }
 
+@keyframes background-fade-white {
+    from {background-color: black;}
+    to {background-color: white;}
+}
+
 body {
     background-color: black !important;
     opacity: 100%;
@@ -27,6 +32,7 @@ body {
     animation-timing-function: ease-in-out;
     animation-play-state: paused;
     display: block;
+    height: 250px;
 }
 
 .calender-day {
@@ -57,4 +63,27 @@ body {
 .calender-description {
     display: block;
     text-align: justify;
+}
+
+.spotify {
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+}
+
+#spotify-progress {
+    animation-name: background-fade-white;
+    animation-duration: 4s;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+    animation-play-state: running;
+
+
+    background-color: white;
+    display: block;
+    height: 10px;
+    transition-property: width;
+    transition: 1000ms linear;
+    width: 0;
 }

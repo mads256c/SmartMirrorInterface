@@ -13,6 +13,10 @@ let lang;
 
 let calender;
 
+let spotifyProgressBar;
+let spotifyName;
+let spotifyArtist;
+
 const ical = require('node-ical');
 
 
@@ -26,6 +30,10 @@ function OnDocumentLoad() {
     timeText = document.getElementById("time-text");
 
     calender = document.getElementById("calender");
+
+    spotifyProgressBar = document.getElementById("spotify-progress");
+    spotifyName = document.getElementById("spotify-name");
+    spotifyArtist = document.getElementById("spotify-artist");
 
     GetConfig();
     //GetLanguage();
@@ -81,6 +89,39 @@ function GetConfig() {
     request.send();
 }
 
+let spotifyResponse;
+
+function UpdateSpotify(){
+    let request = new XMLHttpRequest();
+
+    request.addEventListener("load", function() {
+        if (request.status === 200){
+
+            spotifyResponse = JSON.parse(request.responseText);
+
+            spotifyName.innerText = spotifyResponse.item.name;
+            spotifyArtist.innerText = spotifyResponse.item.artists[0].name;
+            spotifyProgressBar.style.width = (spotifyResponse.progress_ms / spotifyResponse.item.duration_ms) * 100 + "%";
+        }
+        else
+        {
+            console.log("ERROR");
+        }
+
+    }, false);
+
+    request.addEventListener("error", function () {
+        console.log("ERROR");
+    }, false);
+
+    request.open("GET", "https://api.spotify.com/v1/me/player/currently-playing", true);
+    request.setRequestHeader("Accept", "application/json");
+    request.setRequestHeader("Content-Type", "application/json");
+    request.setRequestHeader("Authorization", "Bearer " + config.interface.spotify.oauth);
+
+    request.send();
+}
+
 function OnError() {
     console.log("Could not get configuration");
     greetingText.innerText = "Could not get configuration";
@@ -88,13 +129,17 @@ function OnError() {
 }
 
 function OnReady() {
+
     UpdateTime();
     UpdateWeather();
     setInterval(UpdateTime, 1000 * 5);
     setInterval(UpdateWeather, 1000 * 60 * 10);
     setInterval(UpdateCalender, 1000);
+    setInterval(UpdateSpotify, 1000);
 
     document.body.style.animationPlayState = "running";
+
+
 }
 
 function UpdateTime() {
