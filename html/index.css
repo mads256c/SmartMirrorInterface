@@ -20,7 +20,8 @@ body {
 }
 
 .calender {
-    margin-top: 100px;
+    margin-top: 25px;
+    margin-left: 60%;
     animation-name: opacity-fade-off;
     animation-duration: 1s;
     animation-iteration-count: 1;
@@ -31,7 +32,7 @@ body {
 
 .calender-day {
     border-bottom: white solid 1px;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     display: block;
 }
 

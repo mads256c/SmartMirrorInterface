@@ -13,17 +13,23 @@ exports.startWebserver = function(){
             console.log("fil eksisterer");
             config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
-            fs.stat('dev/', function(err,stats) {if (stats.isDirectory()){
-                    config = JSON.parse(fs.readFileSync('dev/config.json'));}});
-
             fs.stat('languages/' + config.interface.locale.layout + '.json', function(err,stats) {
                 if(stats === undefined){
                     console.log("Locale not yet supported, using en-US");
-                    language = JSON.parse(fs.readFileSync('languages/en-US.json'));
+                    language = JSON.parse(fs.readFileSync('languages/en-US.json', 'utf8'));
                 } else {
                     language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json', 'utf8'));
                 }
             });
+
+            fs.stat('dev/', function(err,stats) {
+                if (stats === undefined){
+                    console.log(err);
+                } else {
+                    console.log("!!!!DEV ENV!!!!")
+                    config = JSON.parse(fs.readFileSync('dev/config.json', 'utf8'));
+                    language = JSON.parse(fs.readFileSync('languages/' + config.interface.locale.layout + '.json', 'utf8'));
+                }});
 
             http.createServer(handleRequest).listen(config.webserver.port);
         }

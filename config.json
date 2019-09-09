@@ -7,18 +7,18 @@
     "name": "",
 
     "locale": {
-      "layout": "da-DK"
+      "layout": ""
     },
 
     "weather": {
-        "latitude": "57.0488195",
-        "longitude": "9.9217469999999822",
-        "apiKey": "97bca87e978b87f27efdcf3fa67dae96"
+        "latitude": "",
+        "longitude": "",
+        "apiKey": ""
     },
 
     "calender": {
       "icalUrls": [
-        "https://services.tamigo.com/Calendar/d10cd296-93e7-4d6b-ad00-0296988fb0f7/Calendar.ics"
+       "" 
       ]
     }
   }
