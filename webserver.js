@@ -13,6 +13,9 @@ exports.startWebserver = function(){
             console.log("fil eksisterer");
             config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
+            fs.stat('dev/', function(err,stats) {if (stats.isDirectory()){
+                    config = JSON.parse(fs.readFileSync('dev/config.json'));}});
+
             fs.stat('languages/' + config.interface.locale.layout + '.json', function(err,stats) {
                 if(stats === undefined){
                     console.log("Locale not yet supported, using en-US");

@@ -109,19 +109,19 @@ function UpdateTime() {
     let name = config.interface.name;
 
 
-    if (hours > 5 && hours < 10)
+    if (hours > 5 && hours =< 10)
     {
         greetingText.innerText = lang.greetings[0] + " " + name;
     }
-    else if (hours > 10 && hours < 14)
+    else if (hours > 10 && hours =< 14)
     {
         greetingText.innerText = lang.greetings[1] + " " + name;
     }
-    else if (hours > 14 && hours < 18)
+    else if (hours > 14 && hours =< 18)
     {
         greetingText.innerText = lang.greetings[2] + " " + name;
     }
-    else if (hours > 18 && hours < 22)
+    else if (hours > 18 && hours =< 22)
     {
         greetingText.innerText = lang.greetings[3] + " " + name;
     }
