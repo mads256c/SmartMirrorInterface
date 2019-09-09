@@ -20,6 +20,10 @@
       "icalUrls": [
        "" 
       ]
+    },
+
+    "spotify": {
+      "oauth": "oauthToken"
     }
   }
 }
